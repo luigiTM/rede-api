@@ -1,4 +1,4 @@
-package com.lughtech.rede;
+package com.lughtech;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

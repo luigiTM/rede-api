@@ -1,4 +1,4 @@
-package com.lughtech.rede;
+package com.lughtech;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;

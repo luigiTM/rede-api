@@ -35,6 +35,19 @@ public class UsuarioServico {
 		usuarioRepositorio.deleteById(id);
 	}
 
+	public Usuario atualizar(Usuario usuario) {
+		Optional<Usuario> usuarioDoBanco = usuarioRepositorio.findById(usuario.getId());
+		Usuario novoUsuario = usuarioDoBanco.orElseThrow(() -> new ObjetoNaoEncontradoException("Objeto não encontrado"));
+		atualizarUsuario(usuario, novoUsuario);
+		usuarioRepositorio.save(novoUsuario);
+		return novoUsuario;
+	}
+
+	private void atualizarUsuario(Usuario usuario, Usuario novoUsuario) {
+		novoUsuario.setNome(usuario.getNome());
+		novoUsuario.setEmail(usuario.getEmail());
+	}
+
 	public Usuario deUmDTO(UsuarioDTO usuarioDto) {
 		return new Usuario(usuarioDto.getId(), usuarioDto.getNome(), usuarioDto.getEmail());
 	}

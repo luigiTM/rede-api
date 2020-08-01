@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.lughtech.dominio.Postagem;
 import com.lughtech.dominio.Usuario;
 import com.lughtech.dto.UsuarioDTO;
 import com.lughtech.servicos.UsuarioServico;
@@ -38,17 +39,31 @@ public class UsuarioRecurso {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> buscarPorId(@RequestBody UsuarioDTO usuarioDto) {
+	public ResponseEntity<Void> inserir(@RequestBody UsuarioDTO usuarioDto) {
 		Usuario usuario = usuarioServico.deUmDTO(usuarioDto);
 		usuario = usuarioServico.inserir(usuario);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(usuario.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
 
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<Void> atualizar(@RequestBody UsuarioDTO usuarioDto, @PathVariable String id) {
+		Usuario usuario = usuarioServico.deUmDTO(usuarioDto);
+		usuario.setId(id);
+		usuario = usuarioServico.atualizar(usuario);
+		return ResponseEntity.noContent().build();
+	}
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> deletarPorId(@PathVariable String id) {
 		usuarioServico.deletar(id);
 		return ResponseEntity.noContent().build();
+	}
+
+	@RequestMapping(value = "/{id}/postagens", method = RequestMethod.GET)
+	public ResponseEntity<List<Postagem>> buscarPostagensPorIdUsuario(@PathVariable String id) {
+		Usuario usuario = usuarioServico.buscarPorId(id);
+		return ResponseEntity.ok().body(usuario.getPostagens());
 	}
 
 }
